@@ -6,7 +6,14 @@ var program = require('commander');
 
 // Global objects {{{
 var app;
+var isElectonTrue = false;
 var win;
+// }}}
+// Fix up if we're running inside an Electron shell {{{
+if (process.argv.length == 1) {
+	process.argv[1] = 'Dedupe-UI';
+	isElectronShell = true;
+}
 // }}}
 
 // Process command line args {{{
@@ -14,7 +21,11 @@ program
 	.version(require('./package.json').version)
 	.option('-v, --verbose', 'Be verbose. Specify multiple times for increasing verbosity', function(i, v) { return v + 1 }, 0)
 	.option('--no-color', 'Disable colors')
-	.parse(process.env.PROGRAM_ARGS ? JSON.parse(process.env.PROGRAM_ARGS) : '')
+	.parse(
+		isElectronShell ? process.argv
+		: process.env.PROGRAM_ARGS ? JSON.parse(process.env.PROGRAM_ARGS)
+		: ''
+	)
 // }}}
 
 async()
