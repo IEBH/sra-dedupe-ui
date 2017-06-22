@@ -78,8 +78,7 @@ async()
 		// Prevent title changes
 		win.on('page-title-updated', e => e.preventDefault())
 
-		// win.loadURL('file://' + tempFile);
-		win.loadURL('http://google.com');
+		win.loadURL(`file://${__dirname}/ui/index.html`);
 
 		win.webContents.once('dom-ready', function() {
 			if (program.verbose >= 3) console.log(colors.blue('[DeDupe-UI]'), 'Electron DOM ready');
