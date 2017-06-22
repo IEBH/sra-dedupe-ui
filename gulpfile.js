@@ -40,6 +40,15 @@ var webpackOptions = {
 		loaders: [
 			{test: /\.css$/, loader: 'style!css'},
 			{test: /\.woff($|\?)|\.woff2($|\?)|\.ttf($|\?)|\.eot($|\?)|\.svg($|\?)/, loader: 'url-loader'},
+			{
+				test: /\.js$/,
+				exclude: /node_modules/,
+				loader: 'babel-loader',
+				query: {
+					presets: ['es2015'],
+					plugins: ['babel-plugin-transform-es2015-template-literals'],
+				},
+			},
 		],
 	},
 	resolve: {
@@ -52,6 +61,7 @@ var webpackOptions = {
 			jQuery: 'jquery',
 			'window.jQuery': 'jquery',
 		}),
+		new webpack.optimize.UglifyJsPlugin(),
 	],
 };
 // }}}
