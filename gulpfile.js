@@ -2,7 +2,8 @@ var _ = require('lodash');
 var electronPackager = require('electron-packager');
 var gulp = require('gulp');
 var os = require('os');
-var webpack = require('webpack-stream');
+var webpack = require('webpack');
+var webpackStream = require('webpack-stream');
 
 // Electron-Packager options {{{
 var packagerOptions = {
@@ -30,6 +31,30 @@ var packagerOptions = {
 	}],
 };
 // }}}
+// Webpack options {{{
+var webpackOptions = {
+	output: {
+		filename: 'app.js',
+	},
+	module: {
+		loaders: [
+			{test: /\.css$/, loader: 'style!css'},
+			{test: /\.woff($|\?)|\.woff2($|\?)|\.ttf($|\?)|\.eot($|\?)|\.svg($|\?)/, loader: 'url-loader'},
+		],
+	},
+	resolve: {
+		root: __dirname,
+		extensions: ['', '.js', '.css'],
+	},
+	plugins: [
+		new webpack.ProvidePlugin({
+			$: 'jquery',
+			jQuery: 'jquery',
+			'window.jQuery': 'jquery',
+		}),
+	],
+};
+// }}}
 
 gulp.task('default', ['build']);
 gulp.task('build', ['build:packager']);
@@ -44,11 +69,7 @@ gulp.task('build:ui:entry', ()=>
 
 gulp.task('build:ui:webpack', ()=>
 	gulp.src('ui/app.js')
-		.pipe(webpack({
-			output: {
-				filename: 'app.js',
-			},
-		}))
+		.pipe(webpackStream(webpackOptions))
 		.pipe(gulp.dest('build/ui'))
 );
 // }}}

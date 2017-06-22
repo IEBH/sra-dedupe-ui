@@ -25,13 +25,20 @@
   },
   "homepage": "https://github.com/CREBP/sra-dedupe-ui#readme",
   "dependencies": {
+    "angular": "^1.6.4",
     "async-chainable": "^2.3.2",
+    "bootstrap": "^3.3.7",
     "chalk": "^1.1.3",
     "commander": "^2.9.0",
+    "css-loader": "^0.28.4",
     "electron-packager": "^8.7.1",
     "electron-prebuilt": "^1.4.13",
+    "font-awesome": "^4.7.0",
     "gulp": "^3.9.1",
+    "jquery": "^3.2.1",
     "lodash": "^4.17.4",
+    "style-loader": "^0.18.2",
+    "url-loader": "^0.5.9",
     "webpack-stream": "^3.2.0"
   },
   "engines": {
