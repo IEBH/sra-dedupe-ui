@@ -3,6 +3,7 @@ var electronPackager = require('electron-packager');
 var gulp = require('gulp');
 var nodemon = require('nodemon');
 var os = require('os');
+var watch = require('gulp-watch');
 var webpack = require('webpack');
 var webpackStream = require('webpack-stream');
 
@@ -131,4 +132,9 @@ gulp.task('serve', ['build:ui'], function(done) {
 				runCount++;
 				console.log('Restart', runCount);
 			});
+
+	watch('./ui/**/*', function() {
+		console.log('Rebuild UI...');
+		gulp.start('build:ui');
+	});
 });

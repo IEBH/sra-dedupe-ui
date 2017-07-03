@@ -1,8 +1,10 @@
 var _ = require('lodash');
 var async = require('async-chainable');
+var base64 = require('base64url');
 var colors = require('chalk');
 var electron = require('electron');
 var program = require('commander');
+var reflib = require('reflib');
 
 // Global objects {{{
 var app;
@@ -15,10 +17,10 @@ if (process.argv.length == 1) {
 	isElectronShell = true;
 }
 // }}}
-
 // Process command line args {{{
 program
 	.version(require('./package.json').version)
+	.option('--debug', 'Enable debug mode for UI')
 	.option('-v, --verbose', 'Be verbose. Specify multiple times for increasing verbosity', function(i, v) { return v + 1 }, 0)
 	.option('--no-color', 'Disable colors')
 	.parse(
@@ -27,6 +29,9 @@ program
 		: ''
 	)
 // }}}
+
+program.debug = true;
+program.verbose = 4;
 
 async()
 	// Setup main process {{{
@@ -61,8 +66,37 @@ async()
 	// Setup message listener {{{
 	.then(function(next) {
 		electron.ipcMain
-			.on('setFile', function(file, b) {
-				console.log('GOT', file, b);
+			.on('setFile', function(e, file) {
+				if (program.verbose) console.log('Set file', colors.cyan(file.filename));
+				async()
+					.then('driver', function(next) {
+						var rfid = reflib.identify(file.filename);
+						if (program.verbose) console.log('Using driver', colors.cyan(rfid));
+						if (!rfid) return next('Cannot identify file driver to use for "' + file.filename + '"');
+						next(null, rfid);
+					})
+					.then(function(next) {
+						var refCount = 0;
+						reflib.parse(this.driver, base64.decode(file.dataUrl.replace(/^data:text\/xml;base64,/, '')))
+							.on('error', err => win.webContents.send('error', err.toString()))
+							.on('ref', ()=> {
+								// Update text on first reference found
+								if (++refCount == 1) win.webContents.send('updateStatus', {text: 'Reading file...'});
+							})
+							.on('progress', (current, max) => win.webContents.send('updateStatus', {
+								progressPercent: Math.round(current / max * 100),
+								progressText: `Processed ${refCount} references`,
+							}))
+							.on('end', function() {
+								win.webContents.send('readLibrary');
+								next();
+							});
+					})
+					.end(function(err) {
+						if (err) {
+							win.webContents.send('error', err.toString());
+						}
+					});
 			});
 
 		next();
@@ -92,7 +126,11 @@ async()
 
 		win.webContents.once('dom-ready', function() {
 			if (program.verbose >= 3) console.log(colors.blue('[DeDupe-UI]'), 'Electron DOM ready');
+
 			win.show();
+
+			if (program.debug) win.webContents.openDevTools();
+
 			return next();
 		});
 	})
