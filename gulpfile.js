@@ -65,7 +65,19 @@ var webpackOptions = {
 			jQuery: 'jquery',
 			'window.jQuery': 'jquery',
 		}),
-		new webpack.optimize.UglifyJsPlugin(),
+		// FIXME: Remove comment below
+		// new webpack.optimize.UglifyJsPlugin(),
+	],
+	externals: [
+		// Workaround to stop Webpack trying to resolve the meta-object 'electron' which is injected at runtime {{{
+		(function () {
+			var ignores = ['electron'];
+			return function (context, request, callback) {
+				if (ignores.indexOf(request) >= 0) return callback(null, "require('" + request + "')");
+				return callback();
+			};
+		})(),
+		// }}}
 	],
 };
 // }}}
