@@ -5,6 +5,7 @@ var colors = require('chalk');
 var electron = require('electron');
 var program = require('commander');
 var reflib = require('reflib');
+var sraDedupe = require('sra-dedupe');
 
 // Global objects {{{
 var app;
@@ -69,34 +70,70 @@ async()
 			.on('setFile', function(e, file) {
 				if (program.verbose) console.log('Set file', colors.cyan(file.filename));
 				async()
+					// Identify the driver {{{
 					.then('driver', function(next) {
 						var rfid = reflib.identify(file.filename);
 						if (program.verbose) console.log('Using driver', colors.cyan(rfid));
 						if (!rfid) return next('Cannot identify file driver to use for "' + file.filename + '"');
 						next(null, rfid);
 					})
-					.then(function(next) {
-						var refCount = 0;
+					// }}}
+					// Read in the file {{{
+					.then('refs', function(next) {
+						var refs = [];
 						reflib.parse(this.driver, base64.decode(file.dataUrl.replace(/^data:text\/xml;base64,/, '')))
 							.on('error', err => win.webContents.send('error', err.toString()))
-							.on('ref', ()=> {
+							.on('ref', ref => {
+								refs.push(ref);
 								// Update text on first reference found
-								if (++refCount == 1) win.webContents.send('updateStatus', {text: 'Reading file...'});
+								if (refs.length == 1) win.webContents.send('updateStatus', {text: 'Reading file...'});
 							})
 							.on('progress', (current, max) => win.webContents.send('updateStatus', {
 								progressPercent: Math.round(current / max * 100),
-								progressText: `Processed ${refCount} references`,
+								progressText: `Processed ${refs.length} references`,
 							}))
 							.on('end', function() {
-								win.webContents.send('readLibrary');
-								next();
+								win.webContents.send('setStage', 'dedupe');
+								next(null, refs);
 							});
 					})
+					// }}}
+					// Dedupe references {{{
+					.then(function(next) {
+						var initialProgress = true; // Have we seen a progress update before?
+						var dupes = 0;
+
+						var deduper = new sraDedupe();
+						deduper.compareAll(this.refs)
+							.on('dupe', function(ref1, ref2, result) {
+								dupes++;
+								console.log('FIXME DUPE', dupes);
+								win.webContents.send('updateStatus', {dupes});
+							})
+							.on('progress', (current, max) => {
+								console.log('FIXME PROGRESS', current, max);
+								if (initialProgress) {
+									win.webContents.send('updateStatus', {text: 'Deduplicating...'});
+									initialProgress = false;
+								}
+								win.webContents.send('updateStatus', {
+									progressPercent: Math.round(current / max * 100),
+									progressText:
+										`Processed ${current} / ${max} comparisons`
+										+ (dupes ? ` (${dupes} dupes)` : '')
+								});
+							})
+							.on('error', next)
+							.on('end', next)
+					})
+					// }}}
+					// End {{{
 					.end(function(err) {
 						if (err) {
 							win.webContents.send('error', err.toString());
 						}
 					});
+					// }}}
 			});
 
 		next();

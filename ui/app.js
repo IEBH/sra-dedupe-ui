@@ -27,6 +27,7 @@ angular
 
 			$ctrl.stage = 'selectFile';
 			$scope.$on('setStage', (e, stage) => $ctrl.stage = stage);
+			electron.ipcRenderer.on('setStage', (e, newStage) => $scope.$apply(()=> $ctrl.stage = newStage))
 		},
 	})
 
@@ -106,7 +107,8 @@ angular
 
 			electron.ipcRenderer
 				.on('updateStatus', (e, newStatus) => $scope.$apply(()=> _.assign($ctrl.status, newStatus)))
-				.on('readLibrary', ()=> $scope.$apply(()=> $scope.$emit('setStage', 'dedupe')))
+
+			$scope.$on('$destroy', ()=> electron.ipcRenderer.removeAllListeners('updateStatus'));
 		},
 	})
 
@@ -138,6 +140,7 @@ angular
 
 			electron.ipcRenderer
 				.on('updateStatus', (e, newStatus) => $scope.$apply(()=> _.assign($ctrl.status, newStatus)))
-				.on('readLibrary', ()=> $scope.$apply(()=> $scope.$emit('setStage', 'dedupe')))
+
+			$scope.$on('$destroy', ()=> electron.ipcRenderer.removeAllListeners('updateStatus'));
 		},
 	})
