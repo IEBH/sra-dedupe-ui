@@ -118,6 +118,7 @@ gulp.task('build:test', ['build:ui'], function(done) {
 });
 // }}}
 
+// serve - use nodemon to constantly restart the app during development {{{
 gulp.task('serve', ['build:ui'], function(done) {
 	var runCount = 0;
 	var monitor = nodemon({
@@ -138,3 +139,4 @@ gulp.task('serve', ['build:ui'], function(done) {
 		gulp.start('build:ui');
 	});
 });
+// }}}
