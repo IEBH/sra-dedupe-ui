@@ -1,4 +1,5 @@
 var electron = require('electron');
+require('ui/app.css');
 require('ui/css/utility-spacing.css');
 require('jquery/dist/jquery.js');
 require('bootstrap/dist/css/bootstrap.css');
@@ -6,6 +7,7 @@ require('bootstrap/dist/js/bootstrap.js');
 require('lodash/lodash.js');
 require('angular/angular.js');
 require('font-awesome/css/font-awesome.css');
+var download = require('downloadjs/download.js');
 
 angular
 	.module('app', [])
@@ -20,6 +22,7 @@ angular
 				<dedupe-select-file ng-switch-when="selectFile"></dedupe-select-file>
 				<dedupe-read-file ng-switch-when="readFile"></dedupe-read-file>
 				<dedupe-dedupe-file ng-switch-when="dedupe"></dedupe-dedupe-file>
+				<dedupe-summary ng-switch-when="summary"></dedupe-summary>
 			</div>
 		`,
 		controller: function($scope) {
@@ -127,6 +130,17 @@ angular
 					<div class="progress-bar progress-bar-striped active" style="width: {{$ctrl.status.progressPercent}}%"></div>
 				</div>
 				<p class="text-muted" ng-bind="$ctrl.status.progressText"></p>
+
+				<div>
+					<div class="btn btn-info">
+						<i class="fa fa-list-ul"></i>
+						{{$ctrl.status.total | number}} total
+					</div>
+					<div class="btn btn-warning">
+						<i class="fa fa-compress"></i>
+						{{$ctrl.status.dupes | number}} dupes
+					</div>
+				</div>
 			</div>
 		`,
 		controller: function($scope) {
@@ -136,11 +150,78 @@ angular
 				text: 'Prepairing to dedupe file',
 				progressPercent: undefined,
 				progressText: undefined,
+				total: undefined,
+				dupes: undefined,
 			};
 
 			electron.ipcRenderer
 				.on('updateStatus', (e, newStatus) => $scope.$apply(()=> _.assign($ctrl.status, newStatus)))
 
 			$scope.$on('$destroy', ()=> electron.ipcRenderer.removeAllListeners('updateStatus'));
+		},
+	})
+
+	/**
+	* Show the summary and allow the download of the file
+	*/
+	.component('dedupeSummary', {
+		template: `
+			<div class="form-horizontal text-center">
+				<h2>Finished deduplicating</h2>
+				<p class="text-muted">{{$ctrl.status.basename}}</p>
+
+				<div>
+					<div class="btn btn-info">
+						<i class="fa fa-list-ul"></i>
+						{{$ctrl.status.total | number}} total
+					</div>
+					<div class="btn btn-warning">
+						<i class="fa fa-compress"></i>
+						{{$ctrl.status.dupes | number}} dupes
+					</div>
+				</div>
+
+				<hr/>
+
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<div class="panel panel-default">
+							<div class="panel-heading">Download library</div>
+							<div class="panel-body">
+								<ul class="list-group">
+									<a ng-repeat="format in $ctrl.status.formats track by format.id" ng-click="$ctrl.downloadAs(format.id)" class="list-group-item">
+										{{format.name}}
+										<strong ng-if="format.id == 'endnotexml'">(recommended)</strong>
+									</a>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row text-center">
+					<a ng-click="$ctrl.startAgain()" class="btn btn-primary">
+						<i class="fa fa-refresh"></i>
+						Start again
+					</a>
+				</div>
+			</div>
+		`,
+		controller: function($scope) {
+			var $ctrl = this;
+
+			$ctrl.status = {
+				filename: undefined,
+				total: undefined,
+				dupes: undefined,
+				formats: undefined,
+			};
+
+			electron.ipcRenderer
+				.on('updateStatus', (e, newStatus) => $scope.$apply(()=> _.assign($ctrl.status, newStatus)))
+
+			$scope.$on('$destroy', ()=> electron.ipcRenderer.removeAllListeners('updateStatus'));
+
+			$ctrl.downloadAs = format => electron.ipcRenderer.send('downloadFile', format);
+			$ctrl.startAgain = ()=> $scope.$emit('setStage', 'selectFile');
 		},
 	})
