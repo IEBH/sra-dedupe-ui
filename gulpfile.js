@@ -87,7 +87,7 @@ gulp.task('build:ui:webpack', ()=>
 );
 // }}}
 
-// build::packager - package the app {{{
+// build:packager - package the app {{{
 gulp.task('build:packager', function(done) {
 	electronPackager(packagerOptions, done);
 });

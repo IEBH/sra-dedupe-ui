@@ -58,6 +58,16 @@ async()
 		checkReady();
 	})
 	// }}}
+	// Setup message listener {{{
+	.then(function(next) {
+		electron.ipcMain
+			.on('setFile', function(file, b) {
+				console.log('GOT', file, b);
+			});
+
+		next();
+	})
+	// }}}
 	// Setup electron page {{{
 	.then(function(next) {
 		// Create the browser window.

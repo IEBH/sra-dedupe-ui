@@ -1,3 +1,4 @@
+var electron = require('electron');
 require('jquery/dist/jquery.js');
 require('bootstrap/dist/css/bootstrap.css');
 require('bootstrap/dist/js/bootstrap.js');
@@ -8,38 +9,43 @@ angular
 	.module('app', [])
 	.component('dedupeController', {
 		template: `
-			<form ng-submit="$ctrl.validate() && $ctrl.submit()" class="form-horizontal">
-				<div ng-show="$ctrl.error" class="alert alert-danger">{{$ctrl.error}}</div>
+			<div class="form-horizontal">
+				<div style="display: none">
+					<input type="file" class="form-control"/>
+				</div>
 
-				<div class="form-group">
-					<label class="col-sm-3 control-label">Library</label>
-					<div class="col-sm-9">
-						<input type="file" class="form-control"/>
-					</div>
+				<div class="text-center">
+					<a ng-click="$ctrl.selectFile()" class="btn btn-success btn-lg">
+						<i class="fa fa-upload"></i>
+						Select library file...
+					</a>
 				</div>
-				<div class="form-group">
-					<div class="pull-right">
-						<button type="submit" class="btn btn-success">
-							<i class="fa fa-check"></i>
-							De-duplicate
-						</button>
-					</div>
-				</div>
-			</form>
+			</div>
 		`,
-		controller: function($scope) {
+		controller: function($element, $scope, $timeout) {
 			var $ctrl = this;
 
-			$ctrl.error;
-			$ctrl.validate = ()=> {
-				$ctrl.error = undefined;
+			// Register file change listener {{{
+			$ctrl.selectFile = ()=> $element.find('input[type=file]').trigger('click');
 
-				$ctrl.error = 'FIXME: False error';
-				return false;
-			};
+			$element
+				.find('input[type=file]')
+				.on('change', function() { $timeout(()=> { // Attach to file widget and listen for change events so we can update the text
+					var filename = $(this).val().replace(/\\/g,'/').replace( /.*\//,''); // Tidy up the file name
 
-			$ctrl.submit = ()=> {
-				console.log('FIXME: SUBMIT!');
-			};
+					var fr = new FileReader();
+					fr.addEventListener('load', data => {
+
+						console.log('Transmit', filename);
+						electron.ipcRenderer
+							.send('setFile', {
+								filename: filename,
+								dataUrl: data.target.result,
+							});
+
+					});
+					fr.readAsDataURL(this.files[0]);
+				})});
+			// }}}
 		},
 	})
