@@ -46,7 +46,10 @@ var webpackOptions = {
 				loader: 'babel-loader',
 				query: {
 					presets: ['es2015'],
-					plugins: ['babel-plugin-transform-es2015-template-literals'],
+					plugins: [
+						'babel-plugin-transform-es2015-template-literals',
+						'angularjs-annotate',
+					],
 				},
 			},
 		],

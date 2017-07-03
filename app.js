@@ -6,7 +6,7 @@ var program = require('commander');
 
 // Global objects {{{
 var app;
-var isElectonTrue = false;
+var isElectronShell = false;
 var win;
 // }}}
 // Fix up if we're running inside an Electron shell {{{
@@ -78,7 +78,7 @@ async()
 		// Prevent title changes
 		win.on('page-title-updated', e => e.preventDefault())
 
-		win.loadURL(`file://${__dirname}/ui/index.html`);
+		win.loadURL(isElectronShell ? `file://${__dirname}/ui/index.html` : `file://${__dirname}/build/ui/index.html`);
 
 		win.webContents.once('dom-ready', function() {
 			if (program.verbose >= 3) console.log(colors.blue('[DeDupe-UI]'), 'Electron DOM ready');
