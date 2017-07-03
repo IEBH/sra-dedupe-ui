@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var electronPackager = require('electron-packager');
 var gulp = require('gulp');
+var nodemon = require('nodemon');
 var os = require('os');
 var webpack = require('webpack');
 var webpackStream = require('webpack-stream');
@@ -103,3 +104,19 @@ gulp.task('build:test', ['build:ui'], function(done) {
 	}), done);
 });
 // }}}
+
+gulp.task('serve', ['build:ui'], function(done) {
+	var runCount = 0;
+	var monitor = nodemon({
+		script: `${__dirname}/start.js`,
+		ext: 'js',
+		ignore: [],
+	})
+			.on('start', function() {
+				console.log('Start');
+			})
+			.on('restart', function() {
+				runCount++;
+				console.log('Restart', runCount);
+			});
+});
