@@ -133,7 +133,6 @@ angular
 
 			// Process incomming file object {{{
 			$ctrl.processFile = file => {
-				console.log('PROC', file);
 				var filename = file.name.replace(/\\/g,'/').replace( /.*\//,''); // Tidy up the file name
 				if (!filename) return;
 
@@ -182,7 +181,7 @@ angular
 			};
 
 			electron.ipcRenderer
-				.on('updateStatus', (e, newStatus) => $scope.$apply(()=> _.assign($ctrl.status, newStatus)))
+				.on('updateStatus', (e, newStatus) => $scope.$apply(()=> _.assign($ctrl.status, newStatus)));
 
 			$scope.$on('$destroy', ()=> electron.ipcRenderer.removeAllListeners('updateStatus'));
 		},

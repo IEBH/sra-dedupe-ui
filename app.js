@@ -7,8 +7,11 @@ var fs = require('fs');
 var fspath = require('path');
 var program = require('commander');
 var reflib = require('reflib');
+var stringToStream = require('string-to-stream');
 var sraDedupe = require('sra-dedupe');
 var stream = require('stream');
+var streamChunker = require('stream-chunker');
+var through2 = require('through2');
 
 // Global objects {{{
 var app;
@@ -51,24 +54,45 @@ var dedupeWorker = function(file) {
 			next(null, rfid);
 		})
 		// }}}
+		// Pause {{{
+		.then(function(next) {
+			setTimeout(()=> next(), 2000);
+		})
+		// }}}
 		// Read in the file {{{
 		.then('refs', function(next) {
+			var throttledUpdate = _.throttle(function(current, max) {
+				win.webContents.send('updateStatus', {
+					progressPercent: Math.round(current / max * 100),
+					progressText: `Processed ${refs.length.toLocaleString()} references`,
+				});
+			}, 250);
+
+			var readStream;
+			if (file.dataUrl) {
+				var decodedContents = base64.decode(file.dataUrl.replace(/^data:text\/xml;base64,/, ''));
+				readStream = stringToStream(decodedContents)
+					.pipe(streamChunker(1024 * 100, {flush: true})) // Split into 100k blocks
+					.pipe(through2(function(chunk, enc, cb) { // Slow down in incomming stream so we have time to update the frontend thread
+						this.push(chunk);
+						setTimeout(cb, 100);
+					}));
+
+			} else if (file.path) {
+				readStream = fs.createReadStream(file.path);
+			} else {
+				throw new Error('Unknown input type');
+			}
+
 			var refs = [];
-			reflib.parse(this.driver,
-				file.dataUrl ? base64.decode(file.dataUrl.replace(/^data:text\/xml;base64,/, ''))
-				: file.path ? fs.readFileSync(file.path, 'utf-8')
-				: ''
-			)
+			reflib.parse(this.driver, readStream)
 				.on('error', err => win.webContents.send('error', err.toString()))
 				.on('ref', ref => {
 					refs.push(ref);
 					// Update text on first reference found
 					if (refs.length == 1) win.webContents.send('updateStatus', {text: 'Reading file...'});
 				})
-				.on('progress', (current, max) => win.webContents.send('updateStatus', {
-					progressPercent: Math.round(current / max * 100),
-					progressText: `Processed ${refs.length} references`,
-				}))
+				.on('progress', (current, max) => throttledUpdate(current, max || decodedContents.length))
 				.on('end', function() {
 					win.webContents.send('setStage', 'dedupe');
 					next(null, refs);
@@ -106,7 +130,7 @@ var dedupeWorker = function(file) {
 					win.webContents.send('updateStatus', {
 						dupes,
 						progressPercent: Math.round(current / max * 100),
-						progressText: `Processed ${current} / ${max} comparisons`,
+						progressText: `Processed ${current.toLocaleString()} / ${max.toLocaleString()} comparisons`,
 					});
 				})
 				.on('error', next)

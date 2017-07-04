@@ -37,7 +37,10 @@
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",
     "reflib": "^1.5.6",
-    "sra-dedupe": "^1.0.6"
+    "sra-dedupe": "^1.0.6",
+    "stream-chunker": "^1.2.8",
+    "string-to-stream": "^1.1.0",
+    "through2": "^2.0.3"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -79,7 +82,10 @@
       "icon": "app/img/icon/32x32.icns"
     },
     "win": {
-      "target": ["nsis", "portable"],
+      "target": [
+        "nsis",
+        "portable"
+      ],
       "icon": "app/img/icon/32x32.ico"
     }
   },

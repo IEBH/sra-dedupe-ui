@@ -82,15 +82,12 @@ gulp.task('serve', ['build'], function(done) {
 	var monitor = nodemon({
 		script: `${__dirname}/start.js`,
 		ext: 'js',
-		ignore: [],
+		ignore: ['./app/**/*'],
 	})
-			.on('start', function() {
-				console.log('Start');
-			})
-			.on('restart', function() {
-				runCount++;
-				console.log('Restart', runCount);
-			});
+		.on('restart', function() {
+			runCount++;
+			console.log('Restart', runCount);
+		});
 
 	watch('./app/**/*', function() {
 		console.log('Rebuild UI...');
