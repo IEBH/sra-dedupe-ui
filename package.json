@@ -66,7 +66,9 @@
   },
   "build": {
     "appId": "com.crebp-sra",
-    "productName": "SRA-DeDupe-UI",
+    "productName": "SRA-DeDupe",
+    "artifactName": "sra-dedupe-${os}-${arch}.${ext}",
+    "asar": false,
     "copyright": "Copyright © 2017 Bond University Centre for Research in Evidence-Based Practice",
     "files": [
       "app.js",
@@ -84,10 +86,7 @@
       "icon": "app/img/icon/256x256.icns"
     },
     "win": {
-      "target": [
-        "nsis",
-        "portable"
-      ],
+      "target": "portable",
       "icon": "app/img/icon/256x256.ico"
     }
   },
