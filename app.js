@@ -26,6 +26,12 @@ program
 	.option('--no-color', 'Disable colors')
 	.parse(process.env.PROGRAM_ARGS ? JSON.parse(process.env.PROGRAM_ARGS) : process.argv) // accept arg dump from upstream electron container script if present, otherwise assume we're run as a regular program
 // }}}
+// Early debugging {{{
+if (program.verbose >= 3) {
+	console.log('__dirname', __dirname);
+	console.log('process.argv', process.argv);
+}
+// }}}
 
 // FIXME: Test setup
 /*
