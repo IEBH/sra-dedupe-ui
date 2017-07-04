@@ -12,14 +12,7 @@ var stream = require('stream');
 
 // Global objects {{{
 var app;
-var isElectronShell = false;
 var win;
-// }}}
-// Fix up if we're running inside an Electron shell {{{
-if (process.argv.length == 1) {
-	process.argv[1] = 'Dedupe-UI';
-	isElectronShell = true;
-}
 // }}}
 // Process command line args {{{
 program
@@ -28,19 +21,13 @@ program
 	.option('--debug', 'Enable debug mode for UI')
 	.option('-v, --verbose', 'Be verbose. Specify multiple times for increasing verbosity', function(i, v) { return v + 1 }, 0)
 	.option('--no-color', 'Disable colors')
-	.parse(
-		isElectronShell ? process.argv
-		: process.env.PROGRAM_ARGS ? JSON.parse(process.env.PROGRAM_ARGS)
-		: ''
-	)
+	.parse(process.env.PROGRAM_ARGS ? JSON.parse(process.env.PROGRAM_ARGS) : process.argv) // accept arg dump from upstream electron container script if present, otherwise assume we're run as a regular program
 // }}}
 
 // FIXME: Test setup
-/*
-program.debug = false;
+program.debug = true;
 program.verbose = 4;
-program.args = ['/home/mc/Papers/Projects/Node/reflib-endnotexml/test/data/endnote-sm.xml'];
-*/
+//program.args = ['/home/mc/Papers/Projects/Node/reflib-endnotexml/test/data/endnote-sm.xml'];
 
 // Dedupe Worker {{{
 /**
@@ -109,7 +96,6 @@ var dedupeWorker = function(file) {
 					}
 				})
 				.on('progress', (current, max) => {
-					console.log('PROGRESS', current, max);
 					if (initialProgress) {
 						win.webContents.send('updateStatus', {
 							text: 'Deduplicating...',
@@ -269,7 +255,9 @@ async()
 		// Prevent title changes
 		win.on('page-title-updated', e => e.preventDefault())
 
-		win.loadURL(isElectronShell ? `file://${__dirname}/ui/index.html` : `file://${__dirname}/build/ui/index.html`);
+		var startPagePath = `file://${__dirname}/build/index.html`;
+		if (program.verbose >= 2) console.log('Loading start page', colors.cyan(startPagePath));
+		win.loadURL(startPagePath);
 
 		win.webContents.once('dom-ready', function() {
 			if (program.verbose >= 3) console.log(colors.blue('[DeDupe-UI]'), 'Electron DOM ready');

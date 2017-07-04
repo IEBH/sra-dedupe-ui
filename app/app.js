@@ -1,13 +1,13 @@
 var electron = require('electron');
-require('ui/app.css');
-require('ui/css/utility-spacing.css');
+require('./css/app.css');
+require('./css/wizard.css');
+require('./css/utility-spacing.css');
 require('jquery/dist/jquery.js');
 require('bootstrap/dist/css/bootstrap.css');
 require('bootstrap/dist/js/bootstrap.js');
 require('lodash/lodash.js');
 require('angular/angular.js');
 require('font-awesome/css/font-awesome.css');
-var download = require('downloadjs/download.js');
 
 angular
 	.module('app', [])
@@ -18,12 +18,56 @@ angular
 	*/
 	.component('dedupeController', {
 		template: `
+			<!-- Tab header {{{ -->
+			<div class="wizard">
+				<div class="wizard-inner">
+					<div class="connecting-line"></div>
+					<ul class="nav nav-tabs" role="tablist">
+						<li ng-class="$ctrl.stage == 'home' && active">
+							<a>
+								<span class="round-tab">
+									<i class="fa fa-home"></i>
+								</span>
+								<span class="round-tab-text">Home</span>
+							</a>
+						</li>
+						<li ng-class="$ctrl.stage == 'readFile' && active">
+							<a>
+								<span class="round-tab">
+									<i class="fa fa-file-o"></i>
+								</span>
+								<span class="round-tab-text">Read file</span>
+							</a>
+						</li>
+						<li ng-class="$ctrl.stage == 'dedupe' && active">
+							<a>
+								<span class="round-tab">
+									<i class="fa fa-lemon-o"></i>
+								</span>
+								<span class="round-tab-text">Deduplicate</span>
+							</a>
+						</li>
+						<li ng-class="$ctrl.stage == 'summary' && active">
+							<a>
+								<span class="round-tab">
+									<i class="fa fa-line-chart"></i>
+								</span>
+								<span class="round-tab-text">Summary</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!-- }}} -->
 			<div ng-switch="$ctrl.stage">
 				<dedupe-select-file ng-switch-when="selectFile"></dedupe-select-file>
 				<dedupe-read-file ng-switch-when="readFile"></dedupe-read-file>
 				<dedupe-dedupe-file ng-switch-when="dedupe"></dedupe-dedupe-file>
 				<dedupe-summary ng-switch-when="summary"></dedupe-summary>
 			</div>
+
+
+
 		`,
 		controller: function($scope) {
 			var $ctrl = this;
