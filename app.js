@@ -240,11 +240,11 @@ async()
 	// }}}
 	// Setup browser app {{{
 	.then(function(next) {
-		if (program.verbose >= 3) console.log(colors.blue('[DeDupe-UI]'), 'Setting up Electron instance');
+		if (program.verbose >= 3) console.log('Setting up Electron instance');
 
 		app = electron.app
 			.once('window-all-closed', function() {
-				if (program.verbose >= 2) console.log(colors.blue('[DeDupe-UI]'), 'All windows closed');
+				if (program.verbose >= 2) console.log('All windows closed');
 				if (process.platform != 'darwin') app.quit(); // Kill everything if we're on Darwin
 			})
 			.once('error', next);
@@ -252,7 +252,7 @@ async()
 		// We have to loop until electron is ready - see https://github.com/electron/electron/issues/1726
 		var checkReady = function() {
 			if (app.isReady()) {
-				if (program.verbose >= 2) console.log(colors.blue('[DeDupe-UI]'), 'Electron app ready');
+				if (program.verbose >= 2) console.log('Electron app ready');
 				next();
 			} else {
 				setTimeout(checkReady, 10);
@@ -275,7 +275,7 @@ async()
 	// Setup electron page {{{
 	.then(function(next) {
 		// Create the browser window.
-		if (program.verbose >= 3) console.log(colors.blue('[DeDupe-UI]'), 'Creating Electron window');
+		if (program.verbose >= 3) console.log('Creating Electron window');
 		win = new electron.BrowserWindow({
 			width: 700,
 			height: 520,
@@ -297,7 +297,7 @@ async()
 		win.loadURL(startPagePath);
 
 		win.webContents.once('dom-ready', function() {
-			if (program.verbose >= 3) console.log(colors.blue('[DeDupe-UI]'), 'Electron DOM ready');
+			if (program.verbose >= 3) console.log('Electron DOM ready');
 
 			win.show();
 
@@ -343,10 +343,10 @@ async()
 
 		// Handle exit state {{{
 		if (err) {
-			console.log(colors.blue('[DeDupe-UI]'), colors.red('ERR'), err.toString());
+			console.log(colors.red('ERR'), err.toString());
 			process.exit(1);
 		} else {
-			if (program.verbose) console.log(colors.blue('[DeDupe-UI]'), 'Exit');
+			if (program.verbose) console.log('Exit');
 			process.exit(0);
 		}
 		// }}}
