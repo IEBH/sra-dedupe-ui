@@ -23,7 +23,7 @@ angular
 				<div class="wizard-inner">
 					<div class="connecting-line"></div>
 					<ul class="nav nav-tabs" role="tablist">
-						<li ng-class="$ctrl.stage == 'home' && active">
+						<li ng-class="$ctrl.stage == 'home' ? 'active' : ''">
 							<a>
 								<span class="round-tab">
 									<i class="fa fa-home"></i>
@@ -31,7 +31,7 @@ angular
 								<span class="round-tab-text">Home</span>
 							</a>
 						</li>
-						<li ng-class="$ctrl.stage == 'readFile' && active">
+						<li ng-class="$ctrl.stage == 'readFile' ? 'active' : ''">
 							<a>
 								<span class="round-tab">
 									<i class="fa fa-file-o"></i>
@@ -39,15 +39,15 @@ angular
 								<span class="round-tab-text">Read file</span>
 							</a>
 						</li>
-						<li ng-class="$ctrl.stage == 'dedupe' && active">
+						<li ng-class="$ctrl.stage == 'dedupe' ? 'active' : ''">
 							<a>
 								<span class="round-tab">
-									<i class="fa fa-lemon-o"></i>
+									<i class="fa fa-compress"></i>
 								</span>
 								<span class="round-tab-text">Deduplicate</span>
 							</a>
 						</li>
-						<li ng-class="$ctrl.stage == 'summary' && active">
+						<li ng-class="$ctrl.stage == 'summary' ? 'active' : ''">
 							<a>
 								<span class="round-tab">
 									<i class="fa fa-line-chart"></i>
@@ -60,19 +60,16 @@ angular
 			</div>
 			<!-- }}} -->
 			<div ng-switch="$ctrl.stage">
-				<dedupe-select-file ng-switch-when="selectFile"></dedupe-select-file>
+				<dedupe-select-file ng-switch-when="home"></dedupe-select-file>
 				<dedupe-read-file ng-switch-when="readFile"></dedupe-read-file>
 				<dedupe-dedupe-file ng-switch-when="dedupe"></dedupe-dedupe-file>
 				<dedupe-summary ng-switch-when="summary"></dedupe-summary>
 			</div>
-
-
-
 		`,
 		controller: function($scope) {
 			var $ctrl = this;
 
-			$ctrl.stage = 'selectFile';
+			$ctrl.stage = 'home';
 			$scope.$on('setStage', (e, stage) => $ctrl.stage = stage);
 			electron.ipcRenderer.on('setStage', (e, newStage) => $scope.$apply(()=> $ctrl.stage = newStage))
 		},
@@ -266,6 +263,6 @@ angular
 			$scope.$on('$destroy', ()=> electron.ipcRenderer.removeAllListeners('updateStatus'));
 
 			$ctrl.downloadAs = format => electron.ipcRenderer.send('downloadFile', format);
-			$ctrl.startAgain = ()=> $scope.$emit('setStage', 'selectFile');
+			$ctrl.startAgain = ()=> $scope.$emit('setStage', 'home');
 		},
 	})
