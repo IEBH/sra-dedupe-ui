@@ -5,6 +5,7 @@ var colors = require('chalk');
 var electron = require('electron');
 var fs = require('fs');
 var fspath = require('path');
+var os = require('os');
 var program = require('commander');
 var reflib = require('reflib');
 var stringToStream = require('string-to-stream');
@@ -13,6 +14,9 @@ var stream = require('stream');
 var streamChunker = require('stream-chunker');
 var through2 = require('through2');
 
+// BUGFIX: Some weird bug on windows means commander falls over if its not given at least one argument {{{
+if (os.platform() == 'win32' && process.argv.length == 1) process.argv.push('--fake-arg');
+// }}}
 // Global objects {{{
 var app;
 var win;
