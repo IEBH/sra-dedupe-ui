@@ -67,12 +67,16 @@ angular
 				<dedupe-summary ng-switch-when="summary"></dedupe-summary>
 			</div>
 		`,
-		controller: function($scope) {
+		controller: function($scope, $timeout) {
 			var $ctrl = this;
 
 			$ctrl.stage = 'home';
 			$scope.$on('setStage', (e, stage) => $ctrl.stage = stage);
 			electron.ipcRenderer.on('setStage', (e, newStage) => $scope.$apply(()=> $ctrl.stage = newStage))
+			electron.ipcRenderer.on('error', (e, err) => $scope.$apply(()=> {
+				$ctrl.stage = 'home';
+				$timeout(()=> $scope.$broadcast('setError', err), 100);
+			}));
 		},
 	})
 
@@ -82,12 +86,21 @@ angular
 	.component('dedupeSelectFile', {
 		template: `
 			<div class="drop-mask"></div>
-			<div class="form-horizontal">
+			<div class="container">
 				<div style="display: none">
 					<input type="file" class="form-control"/>
 				</div>
 
-				<div class="text-center">
+				<div ng-if="$ctrl.error" ng-bind="$ctrl.error" class="alert alert-danger"></div>
+				<div ng-if="!$ctrl.error">
+					<p>Use this de-duplicator tool to examine your citation libraries and remove any found duplicates.</p>
+					<p>The de-duplicator is a tool provided by the <a href="http://crebp.net.au" target="_blank">Bond University Centre for Research in Evidence-Based Practice</a> and is maintained as an Open-Source project on <a href="https://github.com/CREBP/sra-dedupe-ui" target="_blank"><i class="fa fa-github"></i> GitHub</a>.</p>
+					<p>Please give us feedback either in the <a href="https://github.com/CREBP/sra-dedupe-ui/issues" target="_blank">project issues page</a> or <a href="mailto:matt_carter@bond.edu.au">via email</a>. We would love to hear from you.</p>
+				</div>
+
+				<hr/>
+
+				<div class="text-center m-t-50">
 					<a ng-click="$ctrl.selectFile()" class="btn btn-success btn-lg">
 						<i class="fa fa-upload"></i>
 						Select library file...
@@ -150,6 +163,13 @@ angular
 				});
 				fr.readAsDataURL(file);
 			};
+
+			$scope.$on('$destroy', ()=> angular.element('body').removeClass('dragging'));
+			// }}}
+
+			// Respond to errors {{{
+			$ctrl.error;
+			$scope.$on('setError', (e, error) => $ctrl.error = error);
 			// }}}
 		},
 	})
@@ -159,7 +179,7 @@ angular
 	*/
 	.component('dedupeReadFile', {
 		template: `
-			<div class="container text-center">
+			<div class="container text-center m-t-20">
 				<h2>
 					<i class="fa fa-spinner fa-spin fa-lg"></i>
 					{{$ctrl.status.text}}
@@ -192,7 +212,7 @@ angular
 	*/
 	.component('dedupeDedupeFile', {
 		template: `
-			<div class="container text-center">
+			<div class="container text-center m-t-20">
 				<h2>
 					<i class="fa fa-spinner fa-spin fa-lg"></i>
 					{{$ctrl.status.text}}
@@ -270,7 +290,7 @@ angular
 						</div>
 					</div>
 				</div>
-				<div class="row text-center">
+				<div class="row text-center m-b-10">
 					<a ng-click="$ctrl.startAgain()" class="btn btn-primary">
 						<i class="fa fa-refresh"></i>
 						Start again

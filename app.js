@@ -28,9 +28,11 @@ program
 // }}}
 
 // FIXME: Test setup
+/*
 program.debug = true;
 program.verbose = 4;
 //program.args = ['/home/mc/Papers/Projects/Node/reflib-endnotexml/test/data/endnote-sm.xml'];
+*/
 
 // Dedupe Worker {{{
 /**
@@ -187,7 +189,8 @@ var dedupeWorker = function(file) {
 				.on('downloadFile', (e, format) => {
 					// Calculate new file name {{{
 					var foundFormat = reflib.supported.find(f => f.id == format);
-					if (!foundFormat) return; // Invalid format? What do we do here - this shouldn't happen?
+					if (!foundFormat) return win.webContents.send('error', 'Unknown reference file type');
+
 					var newFile = _.clone(fileParsed);
 					newFile.dir = newFile.root = undefined;
 					newFile.ext = foundFormat.ext[0];
@@ -291,6 +294,12 @@ async()
 			if (program.debug) win.webContents.openDevTools();
 
 			return next();
+		});
+
+		// Open external facing links in the system web browser
+		win.webContents.on('new-window', function(e, url) {
+			e.preventDefault();
+			electron.shell.openExternal(url);
 		});
 	})
 	// }}}
