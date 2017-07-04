@@ -66,6 +66,9 @@ angular
 				<dedupe-dedupe-file ng-switch-when="dedupe"></dedupe-dedupe-file>
 				<dedupe-summary ng-switch-when="summary"></dedupe-summary>
 			</div>
+
+			<a href="http://bond.edu.au" target="_blank" class="brand brand-bond"></a>
+			<a href="http://crebp.net.au" target="_blank" class="brand brand-crebp"></a>
 		`,
 		controller: function($scope, $timeout) {
 			var $ctrl = this;

@@ -14,6 +14,13 @@ var webpackOptions = {
 	module: {
 		loaders: [
 			{test: /\.css$/, loader: 'style!css'},
+			{
+				test: /\.(jpe?g|png|gif|svg)$/i,
+				loaders: [
+					'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+					'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
+				],
+			},
 			{test: /\.woff($|\?)|\.woff2($|\?)|\.ttf($|\?)|\.eot($|\?)|\.svg($|\?)/, loader: 'url-loader'},
 			{
 				test: /\.js$/,

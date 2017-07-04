@@ -7,3 +7,38 @@ body {
 a[href], a[ng-click] {
 	cursor: pointer;
 }
+
+/* Branding {{{ */
+.brand.brand-bond,
+.brand.brand-crebp {
+	display: block;
+	position: fixed;
+	opacity: 0.2;
+	transition: opacity 1s;
+}
+
+.brand.brand-bond:hover,
+.brand.brand-crebp:hover {
+	opacity: 1;
+}
+
+.brand.brand-bond {
+	bottom: 10px;
+	left: 10px;
+	width: calc(273px / 2);
+	height: calc(120px / 2);
+	background: url('../img/bond-logo.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
+.brand.brand-crebp {
+	bottom: 10px;
+	right: 10px;
+	width: calc(224px / 2);
+	height: calc(120px / 2);
+	background: url('../img/crebp-logo.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+/* }}} */
