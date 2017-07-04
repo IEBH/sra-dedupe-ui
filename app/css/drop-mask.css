@@ -1,0 +1,38 @@
+/* CSS to display a suitable 'drop files here' prompt when hovering over a window with files */
+/* The mask is only visible if the body has class 'dragging' */
+
+.drop-mask {
+	display: none;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: #FFF;
+	opacity: 0.8;
+	z-index: 1000;
+	border: 10px dashed #CCC;
+	text-align: center;
+}
+
+body.dragging .drop-mask {
+	display: block;
+}
+
+.drop-mask:before {
+	content: "\f0c5";
+	font-size: 72pt;
+	font-family: FontAwesome;
+	position: relative;
+	display: block;
+	left: 0;
+	right: 0;
+	top: 80px;
+}
+
+.drop-mask:after {
+	content: 'Drop files here...';
+	font-size: 32pt;
+	position: relative;
+	top: 100px;
+}

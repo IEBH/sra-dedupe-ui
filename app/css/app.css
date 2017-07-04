@@ -1,3 +1,9 @@
-a {
+body {
+	-webkit-user-select: none;
+	user-select: none;
+	cursor: default;
+}
+
+a[href], a[ng-click] {
 	cursor: pointer;
 }

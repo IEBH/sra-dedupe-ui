@@ -1,5 +1,6 @@
 var electron = require('electron');
 require('./css/app.css');
+require('./css/drop-mask.css');
 require('./css/wizard.css');
 require('./css/utility-spacing.css');
 require('jquery/dist/jquery.js');
@@ -80,6 +81,7 @@ angular
 	*/
 	.component('dedupeSelectFile', {
 		template: `
+			<div class="drop-mask"></div>
 			<div class="form-horizontal">
 				<div style="display: none">
 					<input type="file" class="form-control"/>
@@ -90,6 +92,7 @@ angular
 						<i class="fa fa-upload"></i>
 						Select library file...
 					</a>
+					<div class="text-muted m-t-5">(or drop the file on this window)</div>
 				</div>
 			</div>
 		`,
@@ -102,23 +105,52 @@ angular
 			$element
 				.find('input[type=file]')
 				.on('change', function() { $timeout(()=> { // Attach to file widget and listen for change events so we can update the text
-					var filename = $(this).val().replace(/\\/g,'/').replace( /.*\//,''); // Tidy up the file name
-					if (!filename) return;
-
-					var fr = new FileReader();
-					fr.addEventListener('load', data => {
-
-						console.log('Transmit', filename);
-						electron.ipcRenderer
-							.send('setFile', {
-								filename: filename,
-								dataUrl: data.target.result,
-							});
-
-						$scope.$apply(()=> $scope.$emit('setStage', 'readFile'));
-					});
-					fr.readAsDataURL(this.files[0]);
+					$ctrl.processFile(this.files[0]);
 				})});
+			// }}}
+
+			// Register drop event listener {{{
+			$ctrl.dragLeavingTimer;
+			angular.element('body')
+				.on('dragover', function(e) {
+					angular.element('body').addClass('dragging');
+					e.stopPropagation();
+					e.preventDefault();
+					e.originalEvent.dataTransfer.dropEffect = 'copy';
+					$timeout.cancel($ctrl.dragLeavingTimer);
+				})
+				.on('dragleave', function(e) {
+					$ctrl.dragLeavingTimer = $timeout(()=> angular.element('body').removeClass('dragging'), 100);
+				})
+				.on('drop', function(e) {
+					e.stopPropagation();
+					e.preventDefault();
+					if (!e.originalEvent.dataTransfer.files.length) return;
+					var dropFile = e.originalEvent.dataTransfer.files[0];
+					$ctrl.processFile(dropFile);
+				});
+			// }}}
+
+			// Process incomming file object {{{
+			$ctrl.processFile = file => {
+				console.log('PROC', file);
+				var filename = file.name.replace(/\\/g,'/').replace( /.*\//,''); // Tidy up the file name
+				if (!filename) return;
+
+				var fr = new FileReader();
+				fr.addEventListener('load', data => {
+
+					console.log('Transmit', filename);
+					electron.ipcRenderer
+						.send('setFile', {
+							filename: filename,
+							dataUrl: data.target.result,
+						});
+
+					$scope.$apply(()=> $scope.$emit('setStage', 'readFile'));
+				});
+				fr.readAsDataURL(file);
+			};
 			// }}}
 		},
 	})
@@ -128,7 +160,7 @@ angular
 	*/
 	.component('dedupeReadFile', {
 		template: `
-			<div class="form-horizontal text-center">
+			<div class="container text-center">
 				<h2>
 					<i class="fa fa-spinner fa-spin fa-lg"></i>
 					{{$ctrl.status.text}}
@@ -161,7 +193,7 @@ angular
 	*/
 	.component('dedupeDedupeFile', {
 		template: `
-			<div class="form-horizontal text-center">
+			<div class="container text-center">
 				<h2>
 					<i class="fa fa-spinner fa-spin fa-lg"></i>
 					{{$ctrl.status.text}}
@@ -207,7 +239,7 @@ angular
 	*/
 	.component('dedupeSummary', {
 		template: `
-			<div class="form-horizontal text-center">
+			<div class="container text-center">
 				<h2>Finished deduplicating</h2>
 				<p class="text-muted">{{$ctrl.status.basename}}</p>
 
