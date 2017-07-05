@@ -1,1 +1,6 @@
+build/
+dist/latest.yml
+dist/linux-unpacked/
+dist/mac/
+dist/win-unpacked/
 node_modules/

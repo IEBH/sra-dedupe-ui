@@ -68,7 +68,6 @@
     "appId": "com.crebp-sra",
     "productName": "SRA-DeDupe",
     "artifactName": "sra-dedupe-${os}-${arch}.${ext}",
-    "asar": false,
     "copyright": "Copyright © 2017 Bond University Centre for Research in Evidence-Based Practice",
     "files": [
       "app.js",
@@ -79,16 +78,28 @@
     },
     "linux": {
       "packageCategory": "education",
-      "icon": "app/img/icon"
+      "icon": "app/img/icon",
+      "target": [
+        "AppImage",
+	"deb",
+	"rpm",
+	"tar.bz2"
+      ]
     },
     "mac": {
       "category": "public.app-category.education",
       "icon": "app/img/icon/256x256.icns"
     },
+    "nsis": {
+      "artifactName": "sra-dedupe-${os}-${arch}-installer.${ext}",
+      "license": "./LICENSE"
+    },
     "win": {
-      "target": "portable",
+      "target": [
+        "nsis",
+        "portable"
+      ],
       "icon": "app/img/icon/256x256.ico"
     }
-  },
-  "false": {}
+  }
 }
