@@ -14,8 +14,8 @@ var stream = require('stream');
 var streamChunker = require('stream-chunker');
 var through2 = require('through2');
 
-// BUGFIX: Some weird bug on windows means commander falls over if its not given at least one argument {{{
-if (os.platform() == 'win32' && process.argv.length == 1) process.argv.push('--fake-arg');
+// BUGFIX: Some weird bug on windows (and OS X) means commander falls over if its not given at least one argument {{{
+if (process.argv.length == 1) process.argv.push('--fake-arg');
 // }}}
 // Global objects {{{
 var app;
