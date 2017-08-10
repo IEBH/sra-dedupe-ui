@@ -4,4 +4,3 @@ dist/linux-unpacked/
 dist/mac/
 dist/win-unpacked/
 node_modules/
-dist/
