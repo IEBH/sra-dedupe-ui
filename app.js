@@ -14,8 +14,8 @@ var stream = require('stream');
 var streamChunker = require('stream-chunker');
 var through2 = require('through2');
 
-// BUGFIX: Some weird bug on windows means commander falls over if its not given at least one argument {{{
-if (os.platform() == 'win32' && process.argv.length == 1) process.argv.push('--fake-arg');
+// BUGFIX: Some weird bug on windows (and OS X) means commander falls over if its not given at least one argument {{{
+if (process.argv.length == 1) process.argv.push('--fake-arg');
 // }}}
 // Global objects {{{
 var app;
@@ -24,7 +24,7 @@ var win;
 // Process command line args {{{
 program
 	.version(require('./package.json').version)
-	.option('--dedupe [action]', 'Deduplicate the library via the sra-dedupe NPM module. Actions are \'remove\' (default) or \'mark\' (to set the caption to "DUPE OF X")')
+	.option('--dedupe [action]', 'Deduplicate the library via the sra-dedupe NPM module. Actions are \'remove\' (default) or \'mark\' (to set the caption to "DUPE OF X")', 'remove')
 	.option('--debug', 'Enable debug mode for UI')
 	.option('-v, --verbose', 'Be verbose. Specify multiple times for increasing verbosity', function(i, v) { return v + 1 }, 0)
 	.option('--no-color', 'Disable colors')
