@@ -7,7 +7,8 @@
     "build": "electron-builder -mwl",
     "build-lin": "electron-builder --linux --x64",
     "build-win": "electron-builder --win --x64",
-    "build-win32": "electron-builder --win --ia32"
+    "build-win32": "electron-builder --win --ia32",
+    "build-darwin": "electron-builder --mac"
   },
   "repository": {
     "type": "git",
