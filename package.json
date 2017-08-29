@@ -6,8 +6,10 @@
   "scripts": {
     "build": "electron-builder -mwl",
     "build-lin": "electron-builder --linux --x64",
+    "build-mac": "electron-builder --mac --x64",
     "build-win": "electron-builder --win --x64",
-    "build-win32": "electron-builder --win --ia32"
+    "build-win32": "electron-builder --win --ia32",
+    "postinstall": "electron-builder install-app-deps"
   },
   "repository": {
     "type": "git",
@@ -85,7 +87,6 @@
       "packageCategory": "education",
       "icon": "app/img/icon",
       "target": [
-        "AppImage",
         "deb",
         "rpm",
         "tar.bz2"
@@ -93,7 +94,8 @@
     },
     "mac": {
       "category": "public.app-category.education",
-      "icon": "app/img/icon/256x256.icns"
+      "icon": "app/img/icon/256x256.icns",
+      "target": ["mas"]
     },
     "nsis": {
       "artifactName": "sra-dedupe-${os}-${arch}-installer.${ext}",

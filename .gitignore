@@ -2,5 +2,7 @@ build/
 dist/latest.yml
 dist/linux-unpacked/
 dist/mac/
+dist/mas/
+dist/win-ia32-unpacked/
 dist/win-unpacked/
 node_modules/
