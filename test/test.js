@@ -1,4 +1,5 @@
 var expect = require('chai').expect;
+var fs = require('fs');
 var mlog = require('mocha-logger');
 var spawn = require('child_process').spawn;
 var temp = require('temp');

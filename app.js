@@ -27,9 +27,11 @@ program
 	.option('--dedupe [action]', 'Deduplicate the library via the sra-dedupe NPM module. Actions are \'remove\' (default) or \'mark\' (to set the caption to "DUPE OF X")')
 	.option('--output [path]', 'Automatically output to the given path and quit when finished')
 	.option('--debug', 'Enable debug mode for UI')
-	.option('-v, --verbose', 'Be verbose. Specify multiple times for increasing verbosity', function(i, v) { return v + 1 }, 0)
+	.option('-v, --verbose', 'Be verbose. Specify multiple times for increasing verbosity', (i, v) => v + 1, 0)
 	.option('--no-color', 'Disable colors')
 	.parse(process.env.PROGRAM_ARGS ? JSON.parse(process.env.PROGRAM_ARGS) : process.argv) // accept arg dump from upstream electron container script if present, otherwise assume we're run as a regular program
+
+if (!program.dedupe) program.dedupe = 'remove';
 // }}}
 // Early debugging {{{
 if (program.verbose >= 3) {
@@ -37,13 +39,6 @@ if (program.verbose >= 3) {
 	console.log('process.argv', process.argv);
 }
 // }}}
-
-// FIXME: Test setup
-/*
-program.debug = true;
-program.verbose = 4;
-//program.args = ['/home/mc/Papers/Projects/Node/reflib-endnotexml/test/data/endnote-sm.xml'];
-*/
 
 // Dedupe Worker {{{
 /**
@@ -187,26 +182,6 @@ var dedupeWorker = function(file) {
 				dupes: this.dupesTotal,
 				formats: reflib.supported,
 			});
-
-			// Setup stream (which really writes to a buffer) {{{
-			var requestedFormat;
-			var converter = new stream.Writable();
-			var dataBuffer = [];
-			converter._write = (chunk, enc, next) => {
-				dataBuffer.push(chunk);
-				next();
-			};
-			converter.on('finish', function() {
-				var b = Buffer.concat(dataBuffer);
-
-				/*
-				win.webContents.send('sendFile', {
-					filename: fspath.format(newFile),
-					dataUrl: 'data:text/xml;base64' + base64.encode(b.toString())
-				});
-				*/
-			});
-			// }}}
 
 			var refs = this.refs;
 			electron.ipcMain
