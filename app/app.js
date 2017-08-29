@@ -278,7 +278,7 @@ angular
 
 				<hr/>
 
-				<div class="row">
+				<div ng-if="$ctrl.status.formats.length" class="row">
 					<div class="col-xs-6 col-xs-offset-3">
 						<div class="panel panel-default">
 							<div class="panel-heading">Download library</div>

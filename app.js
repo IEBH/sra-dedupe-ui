@@ -25,6 +25,7 @@ var win;
 program
 	.version(require('./package.json').version)
 	.option('--dedupe [action]', 'Deduplicate the library via the sra-dedupe NPM module. Actions are \'remove\' (default) or \'mark\' (to set the caption to "DUPE OF X")')
+	.option('--output [path]', 'Automatically output to the given path and quit when finished')
 	.option('--debug', 'Enable debug mode for UI')
 	.option('-v, --verbose', 'Be verbose. Specify multiple times for increasing verbosity', function(i, v) { return v + 1 }, 0)
 	.option('--no-color', 'Disable colors')
@@ -52,6 +53,7 @@ program.verbose = 4;
 * @param {string} file.filename The filename given (used to identify the driver to read the file with)
 * @param {string} [file.path] The file path to use (conflicts with file.dataUrl)
 * @param {string} [file.dataUrl] The Base64 Encoded string indifcating the file contents to use (conflicts with file.path)
+* @param {string} [file.output] Optional output path to export the file to
 * @emits error
 * @emits setStage
 * @emits updateStatus
@@ -163,8 +165,20 @@ var dedupeWorker = function(file) {
 			}
 		})
 		// }}}
+		// If file.output - output to the given file and quit {{{
+		.then(function(next) {
+			if (!file.output) return next();
+
+			reflib.outputFile(file.output, this.refs, function(err) {
+				if (err) return next(err);
+				next('EXIT');
+			});
+		})
+		// }}}
 		// Show summary screen {{{
 		.then(function(next) {
+			if (file.output) return next(); // Skip if we outputted above
+
 			var fileParsed = fspath.parse(file.filename);
 			win.webContents.send('updateStatus', {
 				path: file.filename,
@@ -223,7 +237,9 @@ var dedupeWorker = function(file) {
 		// }}}
 		// End {{{
 		.end(function(err) {
-			if (err) {
+			if (err && err == 'EXIT') {
+				setTimeout(()=> app.quit(), 1000); // Wait for Angular to clean up (and avoid flash in/out window appearance)
+			} else if (err) {
 				win.webContents.send('error', err.toString());
 			}
 		});
@@ -322,6 +338,7 @@ async()
 			dedupeWorker({
 				filename: path,
 				path: path,
+				output: program.output,
 			});
 			next();
 		});
