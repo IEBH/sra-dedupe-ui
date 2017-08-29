@@ -21,3 +21,7 @@ Development
 Building
 --------
 See the instructions for multi platform building at the at the [electron-builder project](https://github.com/electron-userland/electron-builder/wiki/Multi-Platform-Build#linux).
+
+To rebuild the binary files run `npm run build` (preferably on a Linux machine with Wine@>=1.8.1).
+
+If you're getting a "Module version mismatch. Expected X, got Y" error run `./node_modules/.bin/electron-rebuild`.
