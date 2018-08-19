@@ -23,8 +23,21 @@ module.exports = {
 			// }}}
 			// Images {{{
 			{
-				test: /\.(jpe?g|png|gif)$/,
-				loader: 'file-loader',
+				test: /\.(jpe?g|png|gif|svg)$/i,
+				use: [
+					'url-loader?limit=10000',
+					{
+						loader: 'img-loader',
+						options: {
+							plugins: [
+								require('imagemin-pngquant')({
+									floyd: 0.5,
+									speed: 2
+								}),
+							],
+						},
+					},
+				],
 			},
 			// }}}
 			// Fonts {{{
