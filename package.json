@@ -36,6 +36,7 @@
     "bootstrap": "^3.3.7",
     "chalk": "^2.1.0",
     "commander": "^2.11.0",
+    "debug": "^3.1.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",
@@ -63,7 +64,8 @@
     "image-webpack-loader": "^3.3.1",
     "mocha": "^3.5.0",
     "mocha-logger": "^1.0.5",
-    "style-loader": "^0.18.2",
+    "run-sequence": "^2.2.1",
+    "style-loader": "^0.22.1",
     "temp": "^0.8.3",
     "url-loader": "^0.5.9",
     "webpack-stream": "^4.0.0"
@@ -95,7 +97,9 @@
     "mac": {
       "category": "public.app-category.education",
       "icon": "app/img/icon/256x256.icns",
-      "target": ["mas"]
+      "target": [
+        "mas"
+      ]
     },
     "nsis": {
       "artifactName": "sra-dedupe-${os}-${arch}-installer.${ext}",
