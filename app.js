@@ -2,6 +2,7 @@ var _ = require('lodash');
 var async = require('async-chainable');
 var base64 = require('base64url');
 var colors = require('chalk');
+var debug = require('debug')('dedupe-ui');
 var electron = require('electron');
 var fs = require('fs');
 var fspath = require('path');
@@ -32,6 +33,7 @@ program
 	.parse(process.env.PROGRAM_ARGS ? JSON.parse(process.env.PROGRAM_ARGS) : process.argv) // accept arg dump from upstream electron container script if present, otherwise assume we're run as a regular program
 
 if (!program.dedupe) program.dedupe = 'remove';
+if (debug.enabled) program.debug = true;
 // }}}
 // Early debugging {{{
 if (program.verbose >= 3) {
@@ -268,12 +270,12 @@ async()
 		// Create the browser window.
 		if (program.verbose >= 3) console.log('Creating Electron window');
 		win = new electron.BrowserWindow({
-			width: 700,
-			height: 520,
+			width: program.debug ? 2000 : 700,
+			height: program.debug ? 1000 : 520,
 			frame: true,
 			title: 'DeDupe-UI',
 			show: false,
-			resizable: false,
+			resizable: program.debug ? true : false,
 			center: true,
 		});
 
