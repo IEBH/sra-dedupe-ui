@@ -3,6 +3,7 @@ require('./css/app.css');
 require('./css/drop-mask.css');
 require('./css/wizard.css');
 require('./css/utility-spacing.css');
+require('./css/bootstrap-extensions/btn-spacing.css');
 require('jquery/dist/jquery.js');
 require('bootstrap/dist/css/bootstrap.css');
 require('bootstrap/dist/js/bootstrap.js');
@@ -279,16 +280,15 @@ angular
 				<hr/>
 
 				<div ng-if="$ctrl.status.formats.length" class="row">
-					<div class="col-xs-6 col-xs-offset-3">
+					<div class="col-xs-10 col-xs-offset-1">
 						<div class="panel panel-default">
 							<div class="panel-heading">Download library</div>
 							<div class="panel-body">
-								<ul class="list-group">
-									<a ng-repeat="format in $ctrl.status.formats track by format.id" ng-click="$ctrl.downloadAs(format.id)" class="list-group-item">
-										{{format.name}}
-										<strong ng-if="format.id == 'endnotexml'">(recommended)</strong>
-									</a>
-								</ul>
+								<a ng-repeat="format in $ctrl.status.formats track by format.id" ng-click="$ctrl.downloadAs(format.id)" class="btn btn-success m-b-5">
+									<i class="fa fa-file-o"></i>
+									{{format.name}}
+									<strong ng-if="format.id == 'endnotexml'">(recommended)</strong>
+								</a>
 							</div>
 						</div>
 					</div>

@@ -1,0 +1,4 @@
+/* Buttons should have some spacing when they appear next to one another */
+.btn + .btn {
+	margin-left: 5px;
+}
