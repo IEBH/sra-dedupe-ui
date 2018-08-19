@@ -196,6 +196,7 @@ var dedupeWorker = function(file) {
 					var newFile = _.clone(fileParsed);
 					newFile.dir = newFile.root = undefined;
 					newFile.ext = foundFormat.ext[0];
+					newFile.base = fspath.basename(newFile.base, fileParsed.ext) + newFile.ext;
 					// }}}
 
 					electron.dialog.showSaveDialog({
