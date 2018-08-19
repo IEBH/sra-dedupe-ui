@@ -34,6 +34,7 @@ program
 
 if (!program.dedupe) program.dedupe = 'remove';
 if (debug.enabled) program.debug = true;
+if (process.env.DEDUPE_FILE) program.args[0] = process.env.DEDUPE_FILE;
 // }}}
 // Early debugging {{{
 if (program.verbose >= 3) {
