@@ -287,7 +287,6 @@ angular
 								<a ng-repeat="format in $ctrl.status.formats track by format.id" ng-click="$ctrl.downloadAs(format.id)" class="btn btn-success m-b-5">
 									<i class="fa fa-file-o"></i>
 									{{format.name}}
-									<strong ng-if="format.id == 'endnotexml'">(recommended)</strong>
 								</a>
 							</div>
 						</div>
