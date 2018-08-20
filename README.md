@@ -11,7 +11,7 @@ Download
 | [sra-dedupe-linux-x86_64.rpm](https://github.com/CREBP/sra-dedupe-ui/raw/master/dist/sra-dedupe-linux-x86_64.rpm)                   | Linux (Redhat) | Suitable for installation on any Redhat based OS - Fedora, RHEL etc. |
 | [sra-dedupe-ui_0.0.1_amd64.snap](https://github.com/CREBP/sra-dedupe-ui/raw/master/dist/sra-dedupe-ui_0.0.1_amd64.snap)             | Linux          | Snap distribution                                                    |
 | [sra-dedupe-linux.tar.bz2](https://github.com/CREBP/sra-dedupe-ui/raw/master/dist/sra-dedupe-linux.tar.bz2)                         | Linux          | Generic Tarball                                                      |
-| [sra-dedupe-mac.zip](https://github.com/CREBP/sra-dedupe-ui/raw/master/dist/sra-dedupe-mac.zip)                                     | Mac            | Generic zip                                                          |
+| sra-dedupe-mac | Mac            | Unfortunately I don't have access to a Mac to compile a version. If you would like to help please contact |
 | [sra-dedupe-ui-0.0.0-x86_64.AppImage](https://github.com/CREBP/sra-dedupe-ui/raw/master/dist/sra-dedupe-ui-0.0.0-x86_64.AppImage)   | Linux          | AppImage installer - most platforms                                  |
 | [sra-dedupe-win.exe](https://github.com/CREBP/sra-dedupe-ui/raw/master/dist/sra-dedupe-win.exe)                                     | Windows        | Generic stand alone executable (no install required)                 |
 | [sra-dedupe-win-installer.exe](https://github.com/CREBP/sra-dedupe-ui/raw/master/dist/sra-dedupe-win-installer.exe)                 | Windows        | Installable version                                                  |
