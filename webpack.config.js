@@ -24,6 +24,7 @@ module.exports = {
 			// Images {{{
 			{
 				test: /\.(jpe?g|png|gif|svg)$/i,
+				exclude: /node_modules\//,
 				use: [
 					'url-loader?limit=10000',
 					{
