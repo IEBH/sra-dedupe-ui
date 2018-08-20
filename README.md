@@ -19,10 +19,18 @@ Download
 Development
 ===========
 
-Building
---------
+Compiling
+---------
 See the instructions for multi platform building at the at the [electron-builder project](https://github.com/electron-userland/electron-builder/wiki/Multi-Platform-Build#linux).
 
-To rebuild the binary files run `npm run build` (preferably on a Linux machine with Wine@>=1.8.1).
+Prerequisite install (on a Ubuntu box):
 
-If you're getting a "Module version mismatch. Expected X, got Y" error run `./node_modules/.bin/electron-rebuild`.
+1. Generic installs (on a Ubuntu box) - `sudo apt install alien dpkg-dev debhelper build-essential libopenjp2-tools snapcraft`
+2. Wine - See https://wiki.winehq.org/Ubuntu
+3. Use gulp to compile everything - `gulp compile` (or `gulp compile:win` etc.)
+
+
+
+Debugging
+---------
+Use `gulp serve` to spin up a Electron shell or `gulp serve serve:debug` to enter debugging mode.
