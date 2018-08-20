@@ -6,6 +6,9 @@
   "scripts": {
     "postinstall": "electron-builder install-app-deps"
   },
+  "bin": {
+    "sra-dedupe": "./start.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CREBP/sra-dedupe-ui.git"
