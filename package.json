@@ -87,6 +87,7 @@
       "target": [
         "deb",
         "rpm",
+        "snap",
         "tar.bz2"
       ]
     },
