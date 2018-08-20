@@ -56,7 +56,6 @@
     "css-loader": "^0.28.5",
     "electron-builder": "^19.26.3",
     "electron-prebuilt": "^1.4.13",
-    "electron-rebuild": "^1.6.0",
     "file-loader": "^1.1.11",
     "gulp": "^3.9.1",
     "gulp-nodemon": "^2.2.1",
