@@ -2,6 +2,7 @@ var webpack = require('webpack');
 var isDev = true;
 
 module.exports = {
+	mode: 'production',
 	output: {
 		filename: 'app.js',
 	},
@@ -63,6 +64,9 @@ module.exports = {
 			},
 			// }}}
 		],
+	},
+	performance: {
+		hints: false,
 	},
 	plugins: [
 		// Inject jQuery {{{
