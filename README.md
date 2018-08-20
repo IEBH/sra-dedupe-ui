@@ -34,3 +34,11 @@ Prerequisite install (on a Ubuntu box):
 Debugging
 ---------
 Use `gulp serve` to spin up a Electron shell or `gulp serve serve:debug` to enter debugging mode.
+
+
+Analysis
+--------
+
+1. Install dependencies - `npm i -g webpack-cli webpack-bundle-analyzer`
+2. Export profiling information - `webpack-cli --profile --json >stats.json`
+3. View profiling display - `webpack-bundle-analyzer stats.json`
