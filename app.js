@@ -15,9 +15,12 @@ var stream = require('stream');
 var streamChunker = require('stream-chunker');
 var through2 = require('through2');
 
-// BUGFIX: Some weird bug on windows means commander falls over if its not given at least one argument {{{
-if (os.platform() == 'win32' && process.argv.length == 1) process.argv.push('--fake-arg');
+var isCompiled = !process.env['PROGRAM_ARGS']; // If PROGRAM_ARGS exists then we are running inside './start.js' and not Electron
+
+// BUGFIX: Commander insists that the executable be listed in process.argv {{{
+if (isCompiled) process.argv.splice(1, 0, 'FAKEEXE');
 // }}}
+
 // Global objects {{{
 var app;
 var win;
