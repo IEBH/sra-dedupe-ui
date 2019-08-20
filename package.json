@@ -38,6 +38,8 @@
     "font-awesome": "^4.7.0",
     "jquery": "^3.3.1",
     "lodash": "^4.17.10",
+    "mime": "^2.4.4",
+    "natives": "^1.1.6",
     "reflib": "^1.5.10",
     "sra-dedupe": "^1.0.9",
     "stream-chunker": "^1.2.8",
