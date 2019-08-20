@@ -10,7 +10,7 @@ a[href], a[ng-click] {
 
 /* Branding {{{ */
 .brand.brand-bond,
-.brand.brand-crebp {
+.brand.brand-iebh {
 	display: block;
 	position: fixed;
 	opacity: 0.2;
@@ -18,7 +18,7 @@ a[href], a[ng-click] {
 }
 
 .brand.brand-bond:hover,
-.brand.brand-crebp:hover {
+.brand.brand-iebh:hover {
 	opacity: 1;
 }
 
@@ -32,12 +32,12 @@ a[href], a[ng-click] {
 	background-repeat: no-repeat;
 }
 
-.brand.brand-crebp {
+.brand.brand-iebh {
 	bottom: 10px;
 	right: 10px;
-	width: calc(224px / 2);
+	width: 224px;
 	height: calc(120px / 2);
-	background: url('../img/crebp-logo.png');
+	background: url('../img/iebh-logo.png');
 	background-size: cover;
 	background-repeat: no-repeat;
 }

@@ -69,7 +69,7 @@ angular
 			</div>
 
 			<a href="http://bond.edu.au" target="_blank" class="brand brand-bond"></a>
-			<a href="http://crebp.net.au" target="_blank" class="brand brand-crebp"></a>
+			<a href="http://iebh.net.au" target="_blank" class="brand brand-iebh"></a>
 		`,
 		controller: function($scope, $timeout) {
 			var $ctrl = this;
@@ -98,8 +98,8 @@ angular
 				<div ng-if="$ctrl.error" ng-bind="$ctrl.error" class="alert alert-danger"></div>
 				<div ng-if="!$ctrl.error">
 					<p>Use this de-duplicator tool to examine your citation libraries and remove any found duplicates.</p>
-					<p>The de-duplicator is a tool provided by the <a href="http://crebp.net.au" target="_blank">Bond University Centre for Research in Evidence-Based Practice</a> and is maintained as an Open-Source project on <a href="https://github.com/CREBP/sra-dedupe-ui" target="_blank"><i class="fa fa-github"></i> GitHub</a>.</p>
-					<p>Please give us feedback either in the <a href="https://github.com/CREBP/sra-dedupe-ui/issues" target="_blank">project issues page</a> or <a href="mailto:matt_carter@bond.edu.au">via email</a>. We would love to hear from you.</p>
+					<p>The de-duplicator is a tool provided by the <a href="https://iebh.bond.edu.au" target="_blank">Bond University Institute for Evidence-Based Healthcare</a> and is maintained as an Open-Source project on <a href="https://github.com/IEBH/sra-dedupe-ui" target="_blank"><i class="fa fa-github"></i> GitHub</a>.</p>
+					<p>Please give us feedback either in the <a href="https://github.com/IEBH/sra-dedupe-ui/issues" target="_blank">project issues page</a> or <a href="mailto:matt_carter@bond.edu.au">via email</a>. We would love to hear from you.</p>
 				</div>
 
 				<hr/>
