@@ -14,7 +14,6 @@ linux:
   target:
     - deb
     - rpm
-    - snap
     - tar.bz2
 mac:
   category: public.app-category.education

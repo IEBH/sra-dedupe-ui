@@ -150,22 +150,17 @@ angular
 
 			// Process incomming file object {{{
 			$ctrl.processFile = file => {
+				console.log('Given file', file);
 				var filename = file.name.replace(/\\/g,'/').replace( /.*\//,''); // Tidy up the file name
 				if (!filename) return;
 
-				var fr = new FileReader();
-				fr.addEventListener('load', data => {
+				electron.ipcRenderer
+					.send('setFile', {
+						filename: filename,
+						path: file.path,
+					});
 
-					console.log('Transmit', filename);
-					electron.ipcRenderer
-						.send('setFile', {
-							filename: filename,
-							dataUrl: data.target.result,
-						});
-
-					$scope.$apply(()=> $scope.$emit('setStage', 'readFile'));
-				});
-				fr.readAsDataURL(file);
+				$scope.$apply(()=> $scope.$emit('setStage', 'readFile'));
 			};
 
 			$scope.$on('$destroy', ()=> angular.element('body').removeClass('dragging'));

@@ -60,6 +60,7 @@ if (program.verbose >= 3) {
 * @emits updateStatus
 */
 var dedupeWorker = function(file) {
+	console.log('Dedupe', file);
 	async()
 		// Identify the driver {{{
 		.then('driver', function(next) {
@@ -76,7 +77,7 @@ var dedupeWorker = function(file) {
 		// }}}
 		// Read in the file {{{
 		.then('refs', function(next) {
-			var throttledUpdate = _.throttle(function(current, max) {
+			var throttledUpdate = _.throttle((current, max) => {
 				win.webContents.send('updateStatus', {
 					progressPercent: Math.round(current / max * 100),
 					progressText: `Processed ${refs.length.toLocaleString()} references`,
@@ -96,6 +97,7 @@ var dedupeWorker = function(file) {
 			} else if (file.path) {
 				readStream = fs.createReadStream(file.path);
 			} else {
+				console.log('Unkown input type:', typeof file, file);
 				throw new Error('Unknown input type');
 			}
 
