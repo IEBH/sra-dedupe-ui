@@ -284,10 +284,14 @@ async()
 			show: false,
 			resizable: program.debug ? true : false,
 			center: true,
+			webPreferences: {
+				nodeIntegration: true,
+			},
 		});
 
 		// Disable menu
 		win.setMenu(null);
+		win.setMenuBarVisibility(false);
 
 		// Prevent title changes
 		win.on('page-title-updated', e => e.preventDefault())

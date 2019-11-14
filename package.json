@@ -51,14 +51,14 @@
     "@babel/preset-env": "^7.7.1",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.0.6",
-    "babel-plugin-angularjs-annotate": "^0.9.0",
+    "babel-plugin-angularjs-annotate": "^0.10.0",
     "babel-plugin-transform-es2015-template-literals": "^6.22.0",
     "chai": "^4.1.2",
     "css-loader": "^1.0.0",
     "electron": "^7.1.1",
     "electron-builder": "^22.1.0",
     "electron-prebuilt": "^1.4.13",
-    "file-loader": "^1.1.11",
+    "file-loader": "^4.2.0",
     "gulp": "^3.9.1",
     "gulp-nodemon": "^2.2.1",
     "gulp-watch": "^5.0.1",
@@ -71,7 +71,7 @@
     "style-loader": "^0.22.1",
     "temp": "^0.8.3",
     "url-loader": "^1.1.1",
-    "webpack-stream": "^5.1.1"
+    "webpack-stream": "^5.2.1"
   },
   "engines": {
     "node": "6.0.0"
