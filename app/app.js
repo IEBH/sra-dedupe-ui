@@ -62,7 +62,7 @@ angular
 				</div>
 			</div>
 			<!-- }}} -->
-			<div ng-switch="$ctrl.stage">
+			<div ng-switch="$ctrl.stage" class="stage">
 				<dedupe-select-file ng-switch-when="home"></dedupe-select-file>
 				<dedupe-read-file ng-switch-when="readFile"></dedupe-read-file>
 				<dedupe-dedupe-file ng-switch-when="dedupe"></dedupe-dedupe-file>
