@@ -5,7 +5,7 @@
 */
 
 var childProcess = require('child_process');
-var electron = require('electron-prebuilt');
+var electron = require('electron');
 
 // Determine whether to detach from parent if the --background || -b flag is present as an arg
 var detach = process.argv.some(function(i) {
@@ -21,7 +21,7 @@ process.chdir(__dirname);
 childProcess.spawn(electron, [
 	'--enable-transparent-visuals',
 	'--disable-gpu',
-	__dirname + '/app.js',
+	`${__dirname}/app.js`,
 ], {
 	stdio: 'inherit',
 	detached: detach,
