@@ -6,8 +6,9 @@ productName: SRA-DeDupe
 artifactName: 'sra-dedupe-${os}-${arch}.${ext}'
 copyright: Copyright © 2017 Bond University Centre for Research in Evidence-Based Practice
 files:
-  - app.js
-  - build/**/*
+  - filter:
+      - app.js
+      - build/**/*
 linux:
   packageCategory: education
   icon: app/img/icon
@@ -28,4 +29,4 @@ win:
     - nsis
     - portable
   icon: app/img/icon/256x256.ico
-electronVersion: 1.4.13
+electronVersion: 7.1.1
