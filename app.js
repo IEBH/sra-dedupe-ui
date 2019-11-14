@@ -207,13 +207,13 @@ var dedupeWorker = function(file) {
 					electron.dialog.showSaveDialog({
 						title: 'Save library as',
 						defaultPath: fspath.format(newFile),
-					}, path => {
-						if (!path) return;
-						if (program.verbose >= 2) console.log('Saving as', colors.cyan(path));
+					}).then(res => {
+						if (res.canceled) return;
+						if (program.verbose >= 2) console.log('Saving as', colors.cyan(res.filePath));
 						reflib.output({
 							content: refs,
 							format: format,
-							stream: fs.createWriteStream(path),
+							stream: fs.createWriteStream(res.filePath),
 						});
 					});
 				});
