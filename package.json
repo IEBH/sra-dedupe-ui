@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/CREBP/sra-dedupe-ui#readme",
   "dependencies": {
+    "@momsfriendlydevco/gulpy": "^1.4.0",
     "angular": "^1.7.3",
     "async-chainable": "^2.4.0",
     "base64url": "^3.0.0",
@@ -59,7 +60,7 @@
     "electron-builder": "^22.1.0",
     "electron-prebuilt": "^1.4.13",
     "file-loader": "^4.2.0",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-nodemon": "^2.2.1",
     "gulp-watch": "^5.0.1",
     "image-webpack-loader": "^4.3.1",

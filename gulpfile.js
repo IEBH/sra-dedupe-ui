@@ -1,5 +1,5 @@
 var _ = require('lodash');
-var gulp = require('gulp');
+var gulp = require('@momsfriendlydevco/gulpy');
 var nodemon = require('nodemon');
 var os = require('os');
 var runSequence = require('run-sequence');
