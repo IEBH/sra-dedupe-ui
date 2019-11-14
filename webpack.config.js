@@ -55,7 +55,7 @@ module.exports = {
 				exclude: /node_modules/,
 				options: {
 					compact: true,
-					presets: ['es2015'],
+					presets: ['@babel/env'],
 					plugins: [
 						'babel-plugin-transform-es2015-template-literals',
 						'angularjs-annotate',
