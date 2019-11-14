@@ -1,15 +1,16 @@
-var electron = require('electron');
-require('./css/app.css');
-require('./css/drop-mask.css');
-require('./css/wizard.css');
-require('./css/utility-spacing.css');
-require('./css/bootstrap-extensions/btn-spacing.css');
-require('jquery/dist/jquery.js');
-require('bootstrap/dist/css/bootstrap.css');
-require('bootstrap/dist/js/bootstrap.js');
-require('lodash/lodash.js');
-require('angular/angular.js');
-require('font-awesome/css/font-awesome.css');
+import angular from 'angular';
+import electron from 'electron';
+import jquery from 'jquery';
+import lodash from 'lodash';
+
+import './css/app.css';
+import './css/drop-mask.css';
+import './css/wizard.css';
+import './css/utility-spacing.css';
+import './css/bootstrap-extensions/btn-spacing.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.js';
+import 'font-awesome/css/font-awesome.css';
 
 angular
 	.module('app', [])
