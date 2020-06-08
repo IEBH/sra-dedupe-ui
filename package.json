@@ -1,10 +1,12 @@
 {
   "name": "sra-dedupe-ui",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Front-end UI for the sra-dedupe module",
   "main": "app.js",
   "scripts": {
-    "postinstall": "electron-builder install-app-deps"
+    "build": "gulp compile",
+    "postinstall": "electron-builder install-app-deps",
+    "serve": "gulp serve"
   },
   "bin": {
     "sra-dedupe": "./start.js"
@@ -28,7 +30,7 @@
   },
   "homepage": "https://github.com/CREBP/sra-dedupe-ui#readme",
   "dependencies": {
-    "@momsfriendlydevco/gulpy": "^1.4.0",
+    "@momsfriendlydevco/gulpy": "^1.4.1",
     "angular": "^1.7.3",
     "async-chainable": "^2.4.0",
     "base64url": "^3.0.0",
@@ -38,18 +40,18 @@
     "debug": "^3.1.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.3.1",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.15",
     "mime": "^2.4.4",
     "natives": "^1.1.6",
-    "reflib": "^1.7.4",
-    "sra-dedupe": "^1.0.9",
+    "reflib": "^1.7.5",
+    "sra-dedupe": "^1.1.0",
     "stream-chunker": "^1.2.8",
     "string-to-stream": "^1.1.1",
     "through2": "^2.0.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.2",
-    "@babel/preset-env": "^7.7.1",
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.0.6",
     "babel-plugin-angularjs-annotate": "^0.10.0",
